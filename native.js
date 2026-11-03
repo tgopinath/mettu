@@ -12,6 +12,7 @@ const Native = (() => {
 
   return {
     available,
+    onShared(cb) { try { cap().Plugins.MettuNative.addListener('shared', cb); } catch {} },
     // kind: ringtone | notification | alarm | contact
     async setTone(blob, { title, fileName, kind, contactUri }) {
       return call('setTone', { data: await b64(blob), mime: blob.type, title, fileName, kind, contactUri });
@@ -26,7 +27,7 @@ const Native = (() => {
       if (!available()) return null;
       const r = await call('getShared').catch(() => null);
       if (!r) return null;
-      return { file: r.data ? new File([fromB64(r.data, r.mime || 'audio/*')], r.name || 'Shared audio', { type: r.mime || '' }) : null, text: r.text || '' };
+      return { error: r.error || '', file: r.data ? new File([fromB64(r.data, r.mime || 'audio/*')], r.name || 'Shared audio', { type: r.mime || '' }) : null, text: r.text || '' };
     },
   };
 })();

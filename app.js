@@ -744,12 +744,14 @@ async function checkShared() {
   }
   if (!f) {
     const n = await Native.takeShared().catch(() => null);
+    if (n?.error) toast(t('badFile'));
     if (n?.file) f = n.file;
     else if (n?.text) { const link = (n.text.match(/https?:\/\/\S+/) || [])[0]; if (link) { S.pendingLink = link; if (location.hash.startsWith('#/find')) screenFind(); else location.hash = '#/find'; } }
   }
   if (f) loadFile(f);
 }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && Native.available()) checkShared(); });
+if (Native.available()) Native.onShared(() => checkShared());
 
 // ---------- router ----------
 function route() {
