@@ -73,7 +73,7 @@ const toggle = (btn, fn) => () => (btn.dataset.playing ? stopAll() : fn());
 
 // ---------- loading audio ----------
 async function loadFile(file, nameOverride) {
-  stopAll();
+  stopAll(); routeSeq++;
   const main = $('#main');
   main.innerHTML = `<section class="wrap loading" aria-busy="true"><div class="spinner" aria-hidden="true"></div><p class="body-lg" id="loadMsg">${t('loading')}</p></section>`;
   try {
@@ -149,8 +149,11 @@ function stepper(active) {
   return `<ol class="stepper">${steps.map(([k, l], i) => `<li class="${k === active ? 'on' : ''}"><span>${i + 1}</span>${l}</li>`).join('')}</ol>`;
 }
 
+let routeSeq = 0;
 async function screenMake() {
+  const seq = routeSeq;
   const tones = await Store.all().catch(() => []);
+  if (seq !== routeSeq) return; // the user (or a share) moved on while tones were loading
   $('#main').innerHTML = `
   <section class="wrap hero">
     <p class="kicker">${t('heroK')}</p>
@@ -592,7 +595,9 @@ function wireTones(tones) {
   });
 }
 async function screenTones() {
+  const seq = routeSeq;
   const tones = await Store.all().catch(() => []);
+  if (seq !== routeSeq) return;
   $('#main').innerHTML = `<section class="wrap page"><h1 class="heading-1">${t('tonesH')}</h1><p class="body muted">${t('tonesP')}</p>
     ${tones.length ? toneList(tones) : `<div class="empty k-card">${icon('tones', 'k-icon empty-ic')}<p>${t('tonesEmpty')}</p><a class="k-btn k-btn-primary" href="#/">${t('makeOne')}</a></div>`}</section>`;
   wireTones(tones);
@@ -755,6 +760,7 @@ if (Native.available()) Native.onShared(() => checkShared());
 
 // ---------- router ----------
 function route() {
+  routeSeq++;
   shell();
   const r = location.hash.replace(/^#\/?/, '').split(/[/?]/)[0] || 'make';
   if (r !== 'edit') stopAll();
