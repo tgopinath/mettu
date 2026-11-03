@@ -481,23 +481,28 @@ addEventListener('resize', () => { drawOverview(); drawDetail(); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => { drawOverview(); drawDetail(); });
 
 // ---------- render (Shape) ----------
-let renderTimer, renderSeq = 0;
+let renderTimer, renderJob = null;
 function scheduleRender(delay = 250) {
   clearTimeout(renderTimer);
   const m = $('#meter'); if (m) m.textContent = t('measuring');
   renderTimer = setTimeout(doRender, delay);
 }
 function renderOpts() { return { start: S.sel.start, end: S.sel.end, fadeIn: S.fadeIn, fadeOut: S.fadeOut, target: LEVELS[S.level] }; }
-async function doRender() {
+// Always resolves with the render for the current settings; concurrent calls share one job.
+function doRender() {
   const o = renderOpts(), key = JSON.stringify(o);
-  if (S.rendered && S.renderKey === key) return S.rendered;
-  const seq = ++renderSeq;
-  const r = await Audio2.render(S.buf, o);
-  if (seq !== renderSeq) return S.rendered;
-  S.rendered = r; S.renderKey = key;
-  const m = $('#meter');
-  if (m) m.textContent = t('measured', { a: r.before.toFixed(1), b: r.after.toFixed(1), p: r.peakDb.toFixed(1) });
-  return r;
+  if (S.rendered && S.renderKey === key) return Promise.resolve(S.rendered);
+  if (renderJob?.key === key) return renderJob.p;
+  const p = Audio2.render(S.buf, o).then(r => {
+    if (renderJob?.key === key) {
+      S.rendered = r; S.renderKey = key;
+      const m = $('#meter');
+      if (m) m.textContent = t('measured', { a: r.before.toFixed(1), b: r.after.toFixed(1), p: r.peakDb.toFixed(1) });
+    }
+    return r;
+  });
+  renderJob = { key, p };
+  return p;
 }
 async function playRendered(btn) {
   const r = await doRender();

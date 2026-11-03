@@ -233,3 +233,10 @@ body.calling { overflow: hidden; }
   .nudge .k-iconbtn { width: 36px; }
 }
 .steps .n { flex: none; }
+@media (min-width: 960px) {
+  .editor { grid-template-columns: minmax(0, 1fr) 340px; column-gap: 24px; align-items: start; }
+  .editor > .ed-head, .editor > .steps, .editor > .wave-card { grid-column: 1 / -1; }
+  .editor > .panel { grid-column: 1; }
+  .editor > .save-bar { grid-column: 2; grid-row: 4; position: sticky; top: 88px; bottom: auto; flex-direction: column; align-items: stretch; }
+  .editor > .save-bar .save-actions { flex-direction: column; }
+}
