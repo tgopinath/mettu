@@ -1,0 +1,271 @@
+/* Kolam tokens — light, dark, high-contrast. Generated from tokens.json */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --surface-sunken: #eaecf1;
+  --surface-raised: #ffffff;
+  --line: #dde0e8;
+  --line-strong: #767e93;
+  --ink: #1f2433;
+  --ink-2: #474e60;
+  --ink-muted: #5b6275;
+  --sidebar: #1f2433;
+  --on-sidebar: #f4f5f8;
+  --primary: #0077b6;
+  --primary-hover: #006aa2;
+  --on-primary: #ffffff;
+  --primary-soft: #e0f1fa;
+  --primary-text: #0070ac;
+  --secondary: #0e8c8c;
+  --secondary-strong: #0d8080;
+  --secondary-hover: #0b6b6b;
+  --on-secondary: #ffffff;
+  --secondary-soft: #e3f4f4;
+  --secondary-text: #0c7777;
+  --accent: #d63384;
+  --accent-hover: #bf2672;
+  --on-accent: #ffffff;
+  --accent-soft: #fbe7f1;
+  --accent-text: #c52876;
+  --success: #0b7a55;
+  --success-soft: #dcf2e8;
+  --warning: #8c5300;
+  --warning-soft: #fcefd3;
+  --danger: #b5360b;
+  --danger-soft: #fbe5dc;
+  --on-danger: #ffffff;
+  --info: #0c7777;
+  --info-soft: #e3f4f4;
+  --focus: #1d4ed8;
+  --scrim: #1f243399;
+  --shadow-1: 0 1px 2px #1f24330f, 0 1px 1px #1f24330a;
+  --shadow-2: 0 4px 12px #1f243314, 0 2px 4px #1f24330d;
+  --shadow-3: 0 16px 40px #1f243326, 0 4px 12px #1f243314;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="contrast"]) {
+    color-scheme: dark;
+    --bg: #10131b;
+    --surface: #171b26;
+    --surface-sunken: #0b0d13;
+    --surface-raised: #1f2433;
+    --line: #2a3040;
+    --line-strong: #6f7891;
+    --ink: #eceef4;
+    --ink-2: #b4bacb;
+    --ink-muted: #9097aa;
+    --sidebar: #0b0d13;
+    --on-sidebar: #eceef4;
+    --primary: #4fb3e8;
+    --primary-hover: #7cc7f0;
+    --on-primary: #04223a;
+    --primary-soft: #0b2b40;
+    --primary-text: #7cc7f0;
+    --secondary: #3cc4c4;
+    --secondary-strong: #3cc4c4;
+    --secondary-hover: #6fd8d8;
+    --on-secondary: #032a2a;
+    --secondary-soft: #0b3232;
+    --secondary-text: #6fd8d8;
+    --accent: #f06aaa;
+    --accent-hover: #f594c2;
+    --on-accent: #2a0716;
+    --accent-soft: #3d1029;
+    --accent-text: #f59ac5;
+    --success: #4cc79a;
+    --success-soft: #0e3326;
+    --warning: #f2b44a;
+    --warning-soft: #3a2a0c;
+    --danger: #ff8a63;
+    --danger-soft: #42190d;
+    --on-danger: #2a0a00;
+    --info: #6fd8d8;
+    --info-soft: #0b3232;
+    --focus: #9cbcff;
+    --scrim: #000000b3;
+    --shadow-1: 0 1px 2px #00000066;
+    --shadow-2: 0 6px 16px #00000080;
+    --shadow-3: 0 20px 48px #000000a6;
+  }
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #10131b;
+  --surface: #171b26;
+  --surface-sunken: #0b0d13;
+  --surface-raised: #1f2433;
+  --line: #2a3040;
+  --line-strong: #6f7891;
+  --ink: #eceef4;
+  --ink-2: #b4bacb;
+  --ink-muted: #9097aa;
+  --sidebar: #0b0d13;
+  --on-sidebar: #eceef4;
+  --primary: #4fb3e8;
+  --primary-hover: #7cc7f0;
+  --on-primary: #04223a;
+  --primary-soft: #0b2b40;
+  --primary-text: #7cc7f0;
+  --secondary: #3cc4c4;
+  --secondary-strong: #3cc4c4;
+  --secondary-hover: #6fd8d8;
+  --on-secondary: #032a2a;
+  --secondary-soft: #0b3232;
+  --secondary-text: #6fd8d8;
+  --accent: #f06aaa;
+  --accent-hover: #f594c2;
+  --on-accent: #2a0716;
+  --accent-soft: #3d1029;
+  --accent-text: #f59ac5;
+  --success: #4cc79a;
+  --success-soft: #0e3326;
+  --warning: #f2b44a;
+  --warning-soft: #3a2a0c;
+  --danger: #ff8a63;
+  --danger-soft: #42190d;
+  --on-danger: #2a0a00;
+  --info: #6fd8d8;
+  --info-soft: #0b3232;
+  --focus: #9cbcff;
+  --scrim: #000000b3;
+  --shadow-1: 0 1px 2px #00000066;
+  --shadow-2: 0 6px 16px #00000080;
+  --shadow-3: 0 20px 48px #000000a6;
+}
+@media (prefers-contrast: more) {
+  :root:not([data-theme]) {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-sunken: #f0f1f4;
+    --surface-raised: #ffffff;
+    --line: #595959;
+    --line-strong: #000000;
+    --ink: #000000;
+    --ink-2: #1a1a1a;
+    --ink-muted: #333333;
+    --sidebar: #000000;
+    --on-sidebar: #ffffff;
+    --primary: #005480;
+    --primary-hover: #003f60;
+    --on-primary: #ffffff;
+    --primary-soft: #e0f1fa;
+    --primary-text: #005480;
+    --secondary: #095959;
+    --secondary-strong: #095959;
+    --secondary-hover: #064545;
+    --on-secondary: #ffffff;
+    --secondary-soft: #e3f4f4;
+    --secondary-text: #095959;
+    --accent: #921d58;
+    --accent-hover: #73164a;
+    --on-accent: #ffffff;
+    --accent-soft: #fbe7f1;
+    --accent-text: #921d58;
+    --success: #00533a;
+    --success-soft: #dcf2e8;
+    --warning: #5c3b00;
+    --warning-soft: #fcefd3;
+    --danger: #8a2400;
+    --danger-soft: #fbe5dc;
+    --on-danger: #ffffff;
+    --info: #095959;
+    --info-soft: #e3f4f4;
+    --focus: #0033cc;
+    --scrim: #000000b3;
+    --shadow-1: none;
+    --shadow-2: 0 0 0 2px #000000;
+    --shadow-3: 0 0 0 3px #000000;
+  }
+}
+[data-theme="contrast"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-sunken: #f0f1f4;
+  --surface-raised: #ffffff;
+  --line: #595959;
+  --line-strong: #000000;
+  --ink: #000000;
+  --ink-2: #1a1a1a;
+  --ink-muted: #333333;
+  --sidebar: #000000;
+  --on-sidebar: #ffffff;
+  --primary: #005480;
+  --primary-hover: #003f60;
+  --on-primary: #ffffff;
+  --primary-soft: #e0f1fa;
+  --primary-text: #005480;
+  --secondary: #095959;
+  --secondary-strong: #095959;
+  --secondary-hover: #064545;
+  --on-secondary: #ffffff;
+  --secondary-soft: #e3f4f4;
+  --secondary-text: #095959;
+  --accent: #921d58;
+  --accent-hover: #73164a;
+  --on-accent: #ffffff;
+  --accent-soft: #fbe7f1;
+  --accent-text: #921d58;
+  --success: #00533a;
+  --success-soft: #dcf2e8;
+  --warning: #5c3b00;
+  --warning-soft: #fcefd3;
+  --danger: #8a2400;
+  --danger-soft: #fbe5dc;
+  --on-danger: #ffffff;
+  --info: #095959;
+  --info-soft: #e3f4f4;
+  --focus: #0033cc;
+  --scrim: #000000b3;
+  --shadow-1: none;
+  --shadow-2: 0 0 0 2px #000000;
+  --shadow-3: 0 0 0 3px #000000;
+}
+:root {
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+  --size-control-sm: 32px;
+  --size-control-md: 48px;
+  --size-control-lg: 56px;
+  --size-target-min: 48px;
+  --size-icon-sm: 16px;
+  --size-icon-md: 24px;
+  --size-icon-lg: 32px;
+  --size-measure: 68ch;
+  --border-hairline: 1px;
+  --border-control: 1.5px;
+  --border-focus: 2px;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --font-display: Lato, "Noto Sans Tamil", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: Lato, "Noto Sans Tamil", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.display-xl { font-family: var(--font-display); font-size: 48px; line-height: 56px; font-weight: 900; letter-spacing: -0.02em; }
+.display-lg { font-family: var(--font-display); font-size: 36px; line-height: 40px; font-weight: 900; letter-spacing: -0.015em; }
+.heading-1 { font-family: var(--font-display); font-size: 28px; line-height: 36px; font-weight: 700; letter-spacing: -0.01em; }
+.heading-2 { font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 700; }
+.heading-3 { font-family: var(--font-display); font-size: 18px; line-height: 24px; font-weight: 700; }
+.body-lg { font-family: var(--font-sans); font-size: 18px; line-height: 28px; font-weight: 400; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
+.body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }
+.label { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 700; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.03em; }
+.mono { font-family: var(--font-mono); font-size: 14px; line-height: 20px; font-weight: 400; }

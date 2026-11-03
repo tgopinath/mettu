@@ -1,0 +1,11 @@
+{
+  "headers": [
+    { "source": "/(sw.js|index.html|app.js|audio.js|lookup.js|store.js|native.js|i18n.js|styles.css)", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/manifest.json", "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }] },
+    { "source": "/(.*)", "headers": [
+      { "key": "Permissions-Policy", "value": "microphone=(self), camera=(), geolocation=()" },
+      { "key": "X-Content-Type-Options", "value": "nosniff" },
+      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+    ] }
+  ]
+}

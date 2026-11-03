@@ -1,0 +1,5 @@
+.test/
+.vercel/
+node_modules/
+.shots-*/
+.DS_Store
