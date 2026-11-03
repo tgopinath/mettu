@@ -15,7 +15,7 @@ Live: https://mettu.vercel.app · Android: https://github.com/tgopinath/mettu/re
 - `sw.js` — offline shell and the Web Share Target (installed PWA on Android can receive audio from the share sheet).
 
 ## Android app
-A Capacitor shell that loads the live site, plus a small native plugin (`~/Documents/android-wrappers/mettu`, see `.keep-native`):
+A Capacitor shell that loads the live site, plus a small native plugin (source copy in `android/`; the build project is `~/Documents/android-wrappers/mettu`, see `.keep-native`):
 share-sheet intake for `audio/*`, `video/*` and `text/plain` links; MediaStore save + `RingtoneManager.setActualDefaultRingtoneUri` (needs "Modify system settings", which the app asks the user to switch on); contact picker + `CUSTOM_RINGTONE`; ring test played on the ring stream (`USAGE_NOTIFICATION_RINGTONE`).
 
 Build: `cd ~/Documents/android-wrappers/mettu && npx cap sync android && (cd android && ./gradlew assembleDebug)`, then upload `app-debug.apk` as `mettu.apk` to release v1.0.0.

@@ -1,0 +1,1 @@
+{ "appId": "com.gopinath.mettu", "appName": "Mettu", "webDir": "www", "server": { "url": "https://mettu.vercel.app", "cleartext": false }, "android": { "allowMixedContent": false } }
