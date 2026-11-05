@@ -14,7 +14,9 @@ body { min-height: 100vh; padding-bottom: calc(80px + env(safe-area-inset-bottom
 .skip { position: absolute; left: -999px; top: 8px; z-index: 99; background: var(--surface); padding: 8px 16px; border-radius: var(--radius-sm); }
 .skip:focus { left: 16px; }
 main { outline: none; }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+/* Full-width layout: content fills the screen with a fluid side gutter; long text keeps its own measure */
+:root { --gutter: clamp(16px, 3vw, 48px); }
+.wrap { width: 100%; margin: 0; padding: 0 var(--gutter); }
 .muted { color: var(--ink-2); }
 .grow { flex: 1; min-width: 0; }
 h1, h2, h3, p { margin: 0; }
@@ -44,7 +46,7 @@ h1, h2, h3, p { margin: 0; }
   .topnav { display: flex; }
   .bottomnav { display: none; }
   body { padding-bottom: 48px; }
-  .topbar { padding-inline: max(16px, calc((100vw - 1040px) / 2)); }
+  .topbar { padding-inline: var(--gutter); }
 }
 
 /* ---------- make ---------- */
@@ -70,7 +72,7 @@ h1, h2, h3, p { margin: 0; }
 body.dragging main { outline: 3px dashed var(--primary); outline-offset: -12px; border-radius: 24px; }
 .shared-card { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; background: var(--secondary-soft); border-color: transparent; }
 .link-card { margin-top: 24px; gap: 16px; }
-.link-row { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+.link-row { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; max-width: 760px; }
 .link-row .k-input-group { min-width: 220px; }
 .sec-head { display: flex; justify-content: space-between; align-items: baseline; margin: 32px 0 12px; }
 section.wrap + section.wrap { margin-top: 0; }
@@ -207,7 +209,8 @@ body.calling { overflow: hidden; }
 .about-sec { display: flex; gap: 16px; align-items: flex-start; }
 .about-ic { width: 40px; height: 40px; padding: 8px; border-radius: 12px; background: var(--primary-soft); color: var(--primary-text); box-sizing: border-box; flex: none; }
 .about-sec > div { display: grid; gap: 4px; }
-@media (min-width: 840px) { .about { grid-template-columns: 1fr 1fr; } .about > h1, .about > p { grid-column: 1 / -1; } }
+@media (min-width: 840px) { .page.about { grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); } .about > h1, .about > p { grid-column: 1 / -1; } }
+.about-sec p { max-width: 70ch; }
 
 /* ---------- toasts ---------- */
 .toast-wrap { position: fixed; left: 16px; right: 16px; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 120; display: grid; justify-items: center; gap: 8px; pointer-events: none; }

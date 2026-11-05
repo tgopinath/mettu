@@ -1,5 +1,5 @@
 // Mettu works offline after the first visit. Shared files (Android share sheet → installed PWA) arrive here.
-const SHELL = 'mettu-shell-v1';
+const SHELL = 'mettu-shell-v2-wide';
 const FILES = ['./', 'index.html', 'styles.css', 'kolam/tokens.css', 'kolam/kolam.css', 'i18n.js', 'audio.js', 'lookup.js', 'store.js', 'native.js', 'app.js', 'manifest.json', 'icon.svg', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(SHELL).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => e.waitUntil(caches.keys()
