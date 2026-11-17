@@ -28,6 +28,7 @@ function shell() {
   $('#topnav').innerHTML = NAV.map(([k, href, ic]) => `<a href="${href}" ${cur === k ? 'aria-current="page"' : ''}>${icon(ic)}<span>${label[k]}</span></a>`).join('');
   const lb = $('#langBtn'); lb.textContent = t('langSwitch'); lb.setAttribute('aria-label', t('langLabel')); lb.lang = LANG === 'en' ? 'ta' : 'en';
   m3Shell(route, cur, label);
+  iosShell(route, cur, label);
 }
 
 // ---------- Android app mode (Material Design 3, from the shared Kolam M3 kit) ----------
@@ -50,6 +51,41 @@ function m3Shell(route, cur, label) {
   m3.setActive(cur);
   if (route === 'edit') m3.setBack('#/');
 }
+// ---------- iOS app mode (Apple HIG, from the shared Kolam iOS kit) ----------
+// Only inside the iPhone app (Mettu-iOS) or with ?app=ios; in a browser KolamIOS.init returns null.
+const svgI = id => `<svg class="ios-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-${id}"/></svg>`;
+const IOS_TABS = [['make', '#/', svgI('make')], ['find', '#/find', 'magnifyingglass'], ['tones', '#/tones', svgI('tones')], ['about', '#/about', 'info.circle']];
+const ios = window.KolamIOS ? KolamIOS.init({
+  appName: 'Mettu', uaTokens: ['Mettu-iOS'], tint: { light: '#5136BA', dark: '#C0B2F8' }, content: '#main',
+  tabs: IOS_TABS.map(([id, href, ic]) => ({ id, href, icon: ic, label: id })), currentTab: 'make',
+}) : null;
+if (ios) document.documentElement.classList.remove('k-android', 'k-app');
+// The iPhone app's native exporter: WAV in, .m4r ringtone (or .m4a for GarageBand) out through the share sheet.
+const IOS_EXPORT = !!(ios && window.webkit?.messageHandlers?.ringtone);
+const ti = k => t(IOS_EXPORT && I18N.en[k + 'Ios'] ? k + 'Ios' : k);
+function iosShell(route, cur, label) {
+  if (!ios) return;
+  $$('.ios-tab').forEach(el => { const s = el.querySelector('span'); s.textContent = label[el.dataset.tab]; s.lang = LANG; });
+  KolamIOS.tabBar.select(cur);
+  const actions = [{ id: 'iosLang', text: LANG === 'ta' ? 'EN' : 'த', label: t('langLabel'), onClick: () => $('#langBtn').click() }];
+  if (route === 'edit') KolamIOS.navBar.set({ title: (S.fileName || 'Mettu').replace(/\.[a-z0-9]+$/i, ''), back: { label: label.make, onClick: () => (location.hash = '#/') }, actions, keepTitle: true });
+  else KolamIOS.navBar.set({ title: cur === 'make' ? t('brand') : label[cur], large: true, actions, keepTitle: true });
+  $$('.ios-navbar-title, .ios-largetitle').forEach(e => (e.lang = LANG));
+}
+const toB64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(blob); });
+async function iosShare(tone, format, btn, status) {
+  if (btn) btn.disabled = true;
+  status = status || $('#dlg .k-dialog-body');
+  const was = status?.textContent;
+  if (status) status.textContent = t('iosExporting');
+  try {
+    const r = await window.webkit.messageHandlers.ringtone.postMessage({ data: await toB64(tone.blob), ext: 'wav', name: tone.name, format });
+    if (r !== 'cancelled') { KolamIOS.haptic('success'); toast(t('iosShared')); }
+  } catch (e) { KolamIOS.haptic('error'); toast(t('iosFailed', { e: e.message || e })); }
+  if (status) status.textContent = was;
+  if (btn) btn.disabled = false;
+}
+
 $('#langBtn').onclick = () => { LANG = LANG === 'en' ? 'ta' : 'en'; store.set('lang', LANG); try { localStorage.setItem('mettu.lang', LANG); } catch {} route(); };
 
 function toast(msg, action) {
@@ -168,7 +204,7 @@ async function startRecording() {
 
 // ---------- screens ----------
 function stepper(active) {
-  const steps = [['bring', t('stepBring')], ['trim', t('stepTrim')], ['shape', t('stepShape')], ['test', t('stepTest')], ['set', t('stepSet')]];
+  const steps = [['bring', t('stepBring')], ['trim', t('stepTrim')], ['shape', t('stepShape')], ['test', t('stepTest')], ['set', ti('stepSet')]];
   return `<ol class="stepper">${steps.map(([k, l], i) => `<li class="${k === active ? 'on' : ''}"><span>${i + 1}</span>${l}</li>`).join('')}</ol>`;
 }
 
@@ -180,7 +216,7 @@ async function screenMake() {
   $('#main').innerHTML = `
   <section class="wrap hero">
     <p class="kicker">${t('heroK')}</p>
-    <h1 class="display">${t('heroH')}</h1>
+    <h1 class="display">${ti('heroH')}</h1>
     <p class="body-lg lead">${t('heroP')}</p>
     ${stepper('bring')}
   </section>
@@ -591,7 +627,7 @@ async function saveTone() {
   const name = ($('#nameIn').value || S.toneName || 'Tone').trim();
   const tone = { id: Date.now().toString(36), name, created: Date.now(), duration: r.buffer.duration, lufs: +r.after.toFixed(1), source: S.fileName, blob: Audio2.wav(r.buffer) };
   await Store.put(tone);
-  toast(t('saved'), { label: t('setAs'), run: () => setDialog(tone) });
+  toast(t('saved'), { label: IOS_EXPORT ? t('iosExportShort') : t('setAs'), run: () => setDialog(tone) });
   say(t('saved'));
   location.hash = '#/tones';
 }
@@ -600,7 +636,7 @@ function toneList(tones) {
   return `<ul class="k-list tones">${tones.map(x => `<li class="k-list-item tone" data-id="${x.id}">
     <button class="k-iconbtn k-iconbtn-filled" data-act="play" type="button" aria-label="${t('play')} ${esc(x.name)}">${icon('play')}</button>
     <div class="k-list-text"><b>${esc(x.name)}</b><small><span class="mono">${fmt(x.duration, 0)}</span> · <span class="mono">${x.lufs} LUFS</span></small></div>
-    <button class="k-btn k-btn-secondary k-btn-sm" data-act="set" type="button">${Native.available() ? t('setAs') : t('download')}</button>
+    <button class="k-btn k-btn-secondary k-btn-sm" data-act="set" type="button">${Native.available() ? t('setAs') : IOS_EXPORT ? t('iosExportShort') : t('download')}</button>
     <button class="k-iconbtn" data-act="more" type="button" aria-label="${t('rename')}, ${t('del')}: ${esc(x.name)}" aria-haspopup="dialog">${icon('edit')}</button>
   </li>`).join('')}</ul>`;
 }
@@ -621,7 +657,7 @@ async function screenTones() {
   const seq = routeSeq;
   const tones = await Store.all().catch(() => []);
   if (seq !== routeSeq) return;
-  $('#main').innerHTML = `<section class="wrap page"><h1 class="heading-1">${t('tonesH')}</h1><p class="body muted">${t('tonesP')}</p>
+  $('#main').innerHTML = `<section class="wrap page"><h1 class="heading-1">${t('tonesH')}</h1><p class="body muted">${ti('tonesP')}</p>
     ${tones.length ? toneList(tones) : `<div class="empty k-card">${icon('tones', 'k-icon empty-ic')}<p>${t('tonesEmpty')}</p><a class="k-btn k-btn-primary" href="#/">${t('makeOne')}</a></div>`}</section>`;
   wireTones(tones);
 }
@@ -650,6 +686,19 @@ function setDialog(tone) {
       <div class="k-dialog-actions"><button class="k-btn k-btn-outline" data-close type="button">${t('cancel')}</button></div>`, d => {
       d.querySelectorAll('[data-kind]').forEach(b => (b.onclick = () => setNative(tone, b.dataset.kind)));
     });
+    return;
+  }
+  if (IOS_EXPORT) {
+    // HIG: a sheet (not an alert) for a task with several options and instructions.
+    const steps = (h, keys) => `<section class="ios-section"><h3 class="ios-section-header">${t(h)}</h3><ol class="ios-steps">${keys.map(k => `<li>${t(k)}</li>`).join('')}</ol></section>`;
+    const sh = KolamIOS.sheet({ title: t('iosSetH'), detents: ['large'], content: `<div class="ios-export-sheet">
+      <p class="ios-subhead ios-secondary">${esc(tone.name)} · <span class="mono">${fmt(tone.duration || 0, 0)}</span></p>
+      <p class="ios-body">${t('iosSetP')}</p>
+      <div class="ios-export"><button class="ios-btn ios-btn-filled ios-btn-large ios-btn-block" data-fmt="m4r" type="button">${t('iosExport')}</button>
+      <button class="ios-btn ios-btn-tinted ios-btn-large ios-btn-block" data-fmt="m4a" type="button">${t('iosGbBtn')}</button></div>
+      <p class="ios-footnote ios-secondary" id="iosStatus" aria-live="polite"></p>
+      ${steps('iosMacH', ['iosMac1', 'iosMac2', 'iosMac3'])}${steps('iosGbH', ['iosGb1', 'iosGb2', 'iosGb3'])}</div>` });
+    sh.body.querySelectorAll('[data-fmt]').forEach(b => (b.onclick = () => iosShare(tone, b.dataset.fmt, b, sh.body.querySelector('#iosStatus'))));
     return;
   }
   const androidFirst = !isIOS;
@@ -686,10 +735,11 @@ async function setNative(tone, kind) {
 function moreDialog(tone) {
   dialog(`<h2 class="k-dialog-title">${esc(tone.name)}</h2>
     <div class="k-field"><label class="k-label" for="renameIn">${t('rename')}</label><input class="k-input" id="renameIn" value="${esc(tone.name)}" maxlength="40"></div>
-    <div class="dl-row">${Native.available() ? `<button class="k-btn k-btn-outline k-btn-sm" id="saveList" type="button">${icon('download')}<span>${t('saveToList')}</span></button>` : `<button class="k-btn k-btn-outline k-btn-sm" data-dl="mp3" type="button">${icon('download')}<span>MP3</span></button><button class="k-btn k-btn-outline k-btn-sm" data-dl="wav" type="button">${icon('download')}<span>WAV</span></button>`}</div>
+    <div class="dl-row">${IOS_EXPORT ? `<button class="k-btn k-btn-outline k-btn-sm" data-fmt="m4r" type="button">${icon('download')}<span>.m4r</span></button><button class="k-btn k-btn-outline k-btn-sm" data-fmt="file" type="button">${icon('download')}<span>WAV</span></button>` : Native.available() ? `<button class="k-btn k-btn-outline k-btn-sm" id="saveList" type="button">${icon('download')}<span>${t('saveToList')}</span></button>` : `<button class="k-btn k-btn-outline k-btn-sm" data-dl="mp3" type="button">${icon('download')}<span>MP3</span></button><button class="k-btn k-btn-outline k-btn-sm" data-dl="wav" type="button">${icon('download')}<span>WAV</span></button>`}</div>
     <div class="k-dialog-actions spread"><button class="k-btn k-btn-ghost danger" id="delBtn" type="button">${icon('trash')}<span>${t('del')}</span></button>
     <span><button class="k-btn k-btn-outline" data-close type="button">${t('cancel')}</button> <button class="k-btn k-btn-primary" id="renameOk" type="button">${t('ok')}</button></span></div>`, d => {
     d.querySelectorAll('[data-dl]').forEach(b => (b.onclick = () => download(tone, b.dataset.dl)));
+    d.querySelectorAll('[data-fmt]').forEach(b => (b.onclick = () => iosShare(tone, b.dataset.fmt, b)));
     const sl = d.querySelector('#saveList');
     if (sl) sl.onclick = async () => { sl.disabled = true; try { let file; try { file = await asMp3(tone); } catch { file = tone.blob; } await Native.setTone(file, { title: tone.name, fileName: `${safeName(tone.name)}.${file.type === 'audio/mpeg' ? 'mp3' : 'wav'}`, kind: 'save' }); d.close(); toast(t('savedToList')); } catch (e) { sl.disabled = false; toast(t('setFailed', { e: e.message || e })); } };
     d.querySelector('#renameOk').onclick = async () => { tone.name = d.querySelector('#renameIn').value.trim() || tone.name; await Store.put(tone); d.close(); route(); };
@@ -758,8 +808,8 @@ function screenAbout() {
   const sec = (h, p, ic) => `<section class="k-card about-sec">${icon(ic, 'k-icon about-ic')}<div><h2 class="heading-3">${t(h)}</h2><p class="body">${t(p)}</p></div></section>`;
   $('#main').innerHTML = `<section class="wrap page about">
     <h1 class="heading-1">${t('aboutH')}</h1><p class="body-lg muted">${t('aboutP')}</p>
-    ${sec('howH', 'howP', 'logo')}${sec('privacyH', 'privacyP', 'shield')}${sec('whyH', 'whyP', 'info')}${sec('androidH', 'androidP', 'android')}${sec('permsH', 'permsP', 'check')}${sec('creditsH', 'creditsP', 'tones')}
-    <p class="body-sm muted">${t('madeBy')}${Native.available() ? '' : ` · <a href="${APK}">${t('getApk')}</a>`}</p></section>`;
+    ${sec('howH', 'howP', 'logo')}${sec('privacyH', 'privacyP', 'shield')}${sec('whyH', 'whyP', 'info')}${IOS_EXPORT ? sec('iosAppH', 'iosAppP', 'phone') : sec('androidH', 'androidP', 'android') + sec('permsH', 'permsP', 'check')}${sec('creditsH', 'creditsP', 'tones')}
+    <p class="body-sm muted">${t('madeBy')}${Native.available() || ios ? '' : ` · <a href="${APK}">${t('getApk')}</a>`}</p></section>`;
 }
 
 // ---------- shared files (web share target + Android share sheet) ----------

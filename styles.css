@@ -243,3 +243,31 @@ body.calling { overflow: hidden; }
   .editor > .save-bar { grid-column: 2; grid-row: 4; position: sticky; top: 88px; bottom: auto; flex-direction: column; align-items: stretch; }
   .editor > .save-bar .save-actions { flex-direction: column; }
 }
+
+/* ---------- iOS app mode (Apple HIG) ----------
+   kolam-ios.css (loaded after this file) builds the navigation bar and tab bar and skins the k- components
+   (buttons, lists, segmented controls, switches, dialogs, toasts). Here only Mettu's own pieces get iOS
+   shapes. Everything is scoped to html.k-ios (inside the iPhone app); the website keeps its Kolam look. */
+html.k-ios .topbar, html.k-ios #bottomnav { display: none; }   /* nav bar + tab bar replace them */
+html.k-ios body { padding-bottom: var(--ios-tabbar-space); }
+html.k-ios .wrap { padding: 0 16px; }
+html.k-ios .page { padding-top: 4px; }
+html.k-ios .page > h1.heading-1:first-child { display: none; } /* the large title already names the screen */
+html.k-ios .display { font: 700 28px/1.214 var(--ios-font-display); letter-spacing: .013em; }
+html.k-ios :lang(ta) .display { font-family: "Noto Sans Tamil", var(--ios-font); font-size: 24px; line-height: 1.45; letter-spacing: 0; }
+html.k-ios .kicker { font: 600 13px/1.385 var(--ios-font); letter-spacing: 0; text-transform: none; color: var(--ios-tint); }
+html.k-ios .mono { font-variant-numeric: tabular-nums; }
+html.k-ios .ios-export { flex-direction: column; align-items: stretch; }
+html.k-ios .ios-export .k-btn { width: 100%; }
+html.k-ios .how section { background: var(--ios-grouped2); border-radius: var(--ios-radius-row); padding: 14px 16px; }
+html.k-ios .how h3 { font: 600 17px/22px var(--ios-font); }
+html.k-ios .how ol { color: var(--ios-label2); font: 400 15px/1.4 var(--ios-font); }
+html.k-ios .how ol:lang(ta), html.k-ios :lang(ta) .how ol { font-family: "Noto Sans Tamil", var(--ios-font); line-height: 1.6; }
+html.k-ios .about-sec { border-radius: var(--ios-radius-card); }
+html.k-ios .store { border-radius: 999px; }
+html.k-ios .ios-export-sheet { display: grid; gap: 12px; padding-bottom: 24px; }
+html.k-ios .ios-export { display: grid; gap: 10px; margin-top: 4px; }
+html.k-ios .ios-export .ios-btn { white-space: normal; height: auto; min-height: 52px; padding-top: 10px; padding-bottom: 10px; line-height: 1.3; }
+html.k-ios .ios-steps { margin: 0; padding: 14px 16px 14px 38px; background: var(--ios-grouped2); border-radius: var(--ios-radius-row); display: grid; gap: 8px; color: var(--ios-label); font: 400 15px/1.4 var(--ios-font); }
+html.k-ios :lang(ta) .ios-steps { font-family: "Noto Sans Tamil", var(--ios-font); line-height: 1.6; }
+html.k-ios .ios-export-sheet .ios-section { margin: 8px 0 0; }

@@ -125,3 +125,24 @@ const I18N = {
 };
 let LANG = (() => { try { return localStorage.getItem('mettu.lang') || 'en'; } catch { return 'en'; } })();
 const t = (k, vars = {}) => (I18N[LANG][k] ?? I18N.en[k] ?? k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
+// iPhone app (Mettu-iOS): iOS cannot set the system ringtone, so the app exports a ringtone file instead.
+Object.assign(I18N.en, {
+  heroHIos: 'Cut the part you love. Make it your ringtone.', stepSetIos: 'Export',
+  tonesPIos: 'Saved on this device only. Export one as an iPhone ringtone.',
+  iosSetH: 'Make it your ringtone', iosSetP: 'iPhone doesn\'t let apps change your ringtone, so Mettu makes a ringtone file (.m4r) and you add it in a few taps.',
+  iosExport: 'Export ringtone (.m4r)', iosExportShort: 'Export', iosGbBtn: 'Share for GarageBand (.m4a)', iosExporting: 'Preparing the ringtone file…',
+  iosMacH: 'With a Mac (Finder)', iosMac1: 'Tap Export ringtone and AirDrop it to your Mac, or save it to Files.', iosMac2: 'Connect the iPhone to the Mac, select it in the Finder sidebar, and drag the .m4r file onto the General tab.', iosMac3: 'On the iPhone, open Settings → Sounds & Haptics → Ringtone and pick it at the top of the list.',
+  iosGbH: 'With GarageBand on iPhone', iosGb1: 'Tap Share for GarageBand and choose Save to Files.', iosGb2: 'In GarageBand, start an Audio Recorder project, open the loop browser → Files, and drag the tone onto the track.', iosGb3: 'In My Songs, touch and hold the project, then Share → Ringtone → Export. Pick it in Settings → Sounds & Haptics.',
+  iosShared: 'Ready. Add it with Finder or GarageBand.', iosFailed: 'Could not make the ringtone file: {e}',
+  iosAppH: 'The iPhone app', iosAppP: 'iPhone doesn\'t let any app change the ringtone, so the iPhone app exports a ringtone file (.m4r) through the share sheet and shows how to add it with a Mac or GarageBand. Everything else works the same, on your phone.',
+});
+Object.assign(I18N.ta, {
+  heroHIos: 'பிடித்த பகுதியை வெட்டுங்கள். ரிங்டோனாக்குங்கள்.', stepSetIos: 'ஏற்றுமதி',
+  tonesPIos: 'இந்தச் சாதனத்தில் மட்டும் சேமிக்கப்படும். ஒன்றை ஐபோன் ரிங்டோனாக ஏற்றுமதி செய்யுங்கள்.',
+  iosSetH: 'உங்கள் ரிங்டோனாக்குங்கள்', iosSetP: 'ஐபோனில் எந்தச் செயலியும் ரிங்டோனை மாற்ற முடியாது. அதனால் மெட்டு ஒரு ரிங்டோன் கோப்பை (.m4r) உருவாக்குகிறது; சில தட்டல்களில் அதைச் சேர்க்கலாம்.',
+  iosExport: 'ரிங்டோனை ஏற்றுமதி செய் (.m4r)', iosExportShort: 'ஏற்றுமதி', iosGbBtn: 'GarageBand-க்குப் பகிர் (.m4a)', iosExporting: 'ரிங்டோன் கோப்பைத் தயாரிக்கிறது…',
+  iosMacH: 'Mac உடன் (Finder)', iosMac1: 'ரிங்டோனை ஏற்றுமதி செய்து AirDrop மூலம் Mac-க்கு அனுப்புங்கள், அல்லது Files-இல் சேமியுங்கள்.', iosMac2: 'ஐபோனை Mac-உடன் இணைத்து, Finder பக்கப்பட்டியில் அதைத் தேர்ந்தெடுத்து, .m4r கோப்பை General தாவலில் இழுத்து விடுங்கள்.', iosMac3: 'ஐபோனில் Settings → Sounds & Haptics → Ringtone திறந்து, பட்டியலின் மேலே அதைத் தேர்வுசெய்யுங்கள்.',
+  iosGbH: 'ஐபோனில் GarageBand உடன்', iosGb1: '“GarageBand-க்குப் பகிர்” தட்டி Save to Files தேர்வுசெய்யுங்கள்.', iosGb2: 'GarageBand-இல் Audio Recorder திட்டத்தைத் தொடங்கி, loop browser → Files திறந்து, கோப்பை டிராக்கில் இழுத்து விடுங்கள்.', iosGb3: 'My Songs-இல் திட்டத்தை அழுத்திப் பிடித்து Share → Ringtone → Export. பிறகு Settings → Sounds & Haptics-இல் தேர்வுசெய்யுங்கள்.',
+  iosShared: 'தயார். Finder அல்லது GarageBand மூலம் சேர்க்கலாம்.', iosFailed: 'ரிங்டோன் கோப்பை உருவாக்க முடியவில்லை: {e}',
+  iosAppH: 'ஐபோன் செயலி', iosAppP: 'ஐபோனில் எந்தச் செயலியும் ரிங்டோனை மாற்ற முடியாது. அதனால் ஐபோன் செயலி பகிர்வுத் தாள் மூலம் ரிங்டோன் கோப்பை (.m4r) தருகிறது; Mac அல்லது GarageBand மூலம் சேர்க்கும் வழியையும் காட்டுகிறது. மற்றவை எல்லாம் அப்படியே, உங்கள் போனிலேயே.',
+});
