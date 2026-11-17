@@ -24,3 +24,5 @@ Build: `cd ~/Documents/android-wrappers/mettu && npx cap sync android && (cd and
 `python3 -m http.server 5290` in this folder (or the `mettu` launch config). Card screenshots: `node tools/shots.mjs` → `prototype/shots`.
 
 Design system: [Kolam](https://tgopinath.github.io/kolam-design-system/) (Lato, 8-pt grid, WCAG AA); Mettu overrides only the primary colour family (Mettu violet).
+
+How it is built (audio engine, data flow, native plugin and iOS exporter, deploy): [ARCHITECTURE.md](ARCHITECTURE.md)
