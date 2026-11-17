@@ -27,10 +27,33 @@ function shell() {
   $('#bottomnav').innerHTML = links;
   $('#topnav').innerHTML = NAV.map(([k, href, ic]) => `<a href="${href}" ${cur === k ? 'aria-current="page"' : ''}>${icon(ic)}<span>${label[k]}</span></a>`).join('');
   const lb = $('#langBtn'); lb.textContent = t('langSwitch'); lb.setAttribute('aria-label', t('langLabel')); lb.lang = LANG === 'en' ? 'ta' : 'en';
+  m3Shell(route, cur, label);
+}
+
+// ---------- Android app mode (Material Design 3, from the shared Kolam M3 kit) ----------
+// Only inside the Android app (or ?app=android); in a browser KolamM3.init returns a stub and this does nothing.
+const m3 = window.KolamM3 ? KolamM3.init({
+  primary: '#5a3ec8', title: 'Mettu',
+  destinations: [
+    { id: 'make', label: 'Make', icon: 'content_cut', href: '#/' },
+    { id: 'find', label: 'Find a song', icon: 'search', href: '#/find' },
+    { id: 'tones', label: 'My tones', icon: 'library_music', href: '#/tones' },
+    { id: 'about', label: 'About', icon: 'info', href: '#/about' },
+  ],
+  hide: ['.topbar', '#bottomnav'],
+}) : { enabled: false };
+function m3Shell(route, cur, label) {
+  if (!m3.enabled) return;
+  document.querySelectorAll('.md-nav-item').forEach(el => { const l = el.querySelector('.md-nav-label'); l.textContent = label[el.dataset.dest]; l.lang = LANG; });
+  m3.setActions([{ id: 'm3Lang', text: LANG === 'ta' ? 'EN' : 'த', lang: LANG === 'ta' ? 'en' : 'ta', label: t('langLabel'), onClick: () => $('#langBtn').click() }]);
+  m3.setTitle(route === 'edit' ? (S.fileName || 'Mettu').replace(/\.[a-z0-9]+$/i, '') : route === 'make' ? 'Mettu' : label[cur] || 'Mettu');
+  m3.setActive(cur);
+  if (route === 'edit') m3.setBack('#/');
 }
 $('#langBtn').onclick = () => { LANG = LANG === 'en' ? 'ta' : 'en'; store.set('lang', LANG); try { localStorage.setItem('mettu.lang', LANG); } catch {} route(); };
 
 function toast(msg, action) {
+  if (m3.enabled) return KolamM3.snackbar(msg, action ? { action: action.label, onAction: action.run, duration: 7000 } : { duration: 3800 });
   const el = document.createElement('div');
   el.className = 'k-toast';
   el.innerHTML = `${icon('check')}<span class="k-toast-text">${esc(msg)}</span>${action ? `<button class="k-btn k-btn-ghost" type="button">${esc(action.label)}</button>` : ''}`;
